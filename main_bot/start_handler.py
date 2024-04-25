@@ -7,7 +7,7 @@ from buttons.inline_keyboar import menu_btn, menu,menu1,menu2,menu3,menu4,menu5
 from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 from states.state import RegisterStates
-from DB.Db import PG
+#from DB.Db import PG
 
 
 dp = Dispatcher()
@@ -16,17 +16,17 @@ dp = Dispatcher()
 
 @dp.message(CommandStart())
 async def start_handler(msg: types.Message,state:FSMContext):
-    obj = PG()
+    #obj = PG()
     print(msg.message_id)
     #print(msg.chat.id)
     full_name = msg.from_user.full_name
     user_id = msg.from_user.id
-    if obj.checked_user(user_id):
-        await msg.answer(f"*Hello {full_name} Welcome to my bot you can learn what you don't know in python with this bot*\n"
-        "\n"
-        '*Enter Your Name*',parse_mode='Markdown')
-        await state.set_state(RegisterStates.lastname)
-    else:await msg.answer(text = "*You are already registered*",parse_mode='Markdown')
+    #obj.checked_user(user_id):
+    await msg.answer(f"*Hello {full_name} Welcome to my bot you can learn what you don't know in python with this bot*\n"
+    "\n"
+    '*Enter Your Name*',parse_mode='Markdown')
+    await state.set_state(RegisterStates.lastname)
+    await msg.answer(text = "*You are already registered*",parse_mode='Markdown')
 @dp.message(RegisterStates.lastname)
 async def last_name_handler(msg: types.Message,state:FSMContext):
     lastname = msg.text
@@ -36,14 +36,14 @@ async def last_name_handler(msg: types.Message,state:FSMContext):
 
 @dp.message(RegisterStates.firstname)
 async def firstname_handler(msg: types.Message,state:FSMContext):
-    obj = PG()
+    #obj = PG()
     firstname = msg.text
     await state.update_data(firstname=firstname)
     data = await state.get_data()
     lastname = data.get('lastname')
     firstname = data.get('firstname')
     user_id = msg.from_user.id
-    obj.add(user_id,lastname,firstname)
+    #obj.add(user_id,lastname,firstname)
     await msg.answer("Successfully registered",parse_mode='Markdown')
 types_command = BotCommand(command = "types",description="Python Types")
 @dp.message(Command(types_command))
